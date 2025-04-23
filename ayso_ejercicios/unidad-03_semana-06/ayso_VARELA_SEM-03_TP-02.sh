@@ -2,7 +2,7 @@
 
 # Trabajo práctico Nº2 - Bash Scripting -  Varela Santiago Octavio (Comisión 22)
 
-# Resolución del trabajo práctico Nº6 al 2025-04-21
+# Resolución del trabajo práctico Nº6 al 2025-04-22
 
 # Respuestas también en https://github.com/santiagovOK/UTN-TUPaD-P1/tree/main/ayso_ejercicios/unidad-03_semana-06/ayso_VARELA_SEM-03_TP-02.ipynb
 
@@ -208,6 +208,65 @@ fi
 
 # ---------------------------
 
+#!/bin/bash
+
+# Evaluamos / verificamos con una estructura condicional el número de parámetros ingresados al ejecutar el script con `$#`, para ver los diferentes casos planteados en la consigna
+# -eq 0 es un operador de comparación aritmético que, en este caso, indica si el número total de parámetros ($#) es igual a 0
+
+if [ $# -eq 0 ]; then
+  echo "No ingresaste ningún parámetro. ¿Queres hacerlo ahora? s/n"
+  read respuesta
+  # Si la respuesta es sí ("s"), se habilitara al usuario a ingresar valores para `num1` y `num2`
+  if [ "$respuesta" == "s" ]; then 
+    echo "Introduzca el primer número:"
+    read num1
+    echo "Introduzca el segundo número:"
+    read num2
+    # En otro caso (else), se cancela la operación
+  else
+    echo "Operación cancelada."
+    exit 1 # `exit 1` sirve para detener la ejecución del script
+  fi
+
+    # Similar a la estructura condicional anterior, pero solo ingresando un número (por eso `$# -eq 1` )
+
+elif [ $# -eq 1 ]; then
+  echo "Ha introducido uno. ¿Quiere ahora s/n?"
+  read respuesta
+  if [ "$respuesta" == "s" ]; then
+    num1=$1
+    echo "Introduzca el segundo número:"
+    read num2
+  else
+    echo "Operación cancelada."
+    exit 1
+  fi
+    # Caso en el que se ingresan los dos parámetros esperados o más (else)
+elif [ $# -eq 2 ]; then
+  echo "CORRECTO"
+  num1=$1
+  num2=$2
+else
+  echo "Demasiados parámetros, tomo los dos primeros."
+  num1=$1
+  num2=$2
+fi
+
+# Realizamos las operaciones, una vez num1 y num2 están definidos
+
+echo "Suma: $((num1 + num2))"
+echo "Resta: $((num1 - num2))"
+echo "Multiplicación: $((num1 * num2))"
+
+# Establecemos la estructura condicional para evaluar, en el caso de la división, si el divisor es 0.
+
+if [ "$num2" -eq 0 ]; then
+  echo "División: Error, no se puede dividir por cero."
+else
+  echo "División: $((num1 / num2))"
+fi
+
+# ---------------------------
 
 # Ejercicio 2.1: Crear un script en Bash que reciba una nota numérica e imprima la calificación correspondiente en formato alfabético, siguiendo el sistema de calificación estándar:
 # • Sobresaliente para notas de 9 o más.
@@ -226,6 +285,48 @@ fi
 
 # ---------------------------
 
+#!/bin/bash
+
+read -p "Ingresá tu nota numérica (en un número entero, del 1 al 10) a este sistema de calificaciones:" nota
+
+# Validamos si la entrada es un número válido (1 al 10)
+# Para esto tuve que utilizar una expresión regular que funcione como condición para el rango que queremos incluir como válido. Ya algo conocía de expresiones regulares y no conozco otra manera más sencilla en Bash.
+if ! [ "$nota" =~ ^[0-9]+$ ]; then
+    echo "Por favor, introduce un número válido."
+    exit 1
+fi
+
+# Verificamos si la nota es un número positivo o no con una estructura condicional y el operador de comparación -gt anteriormente utilizado
+if [ "$nota" -gt 0 ]; then
+    echo "La nota ingresada es un número positivo"
+else
+    echo "La nota ingresada no es un número positivo"
+    exit 1
+fi
+
+# Establecemos la estructura condicional para las calificaciones y sus respectivas categorias por caso, usando una estructura `case` como está en nuestro material de lectura
+case $nota in
+    9|10)
+        echo "Tu nota es $nota, por lo tanto es **sobresaliente**."
+        ;;
+    7|8)
+        echo "Tu nota es $nota, por lo tanto es **notable**."
+        ;;
+    6)
+        echo "Tu nota es $nota, por lo tanto es **bien**."
+        ;;
+    5)
+        echo "Tu nota es $nota, por lo tanto es **suficiente**."
+        ;;
+    1|2|3|4)
+        echo "Tu nota es $nota, por lo tanto es **insuficiente**."
+        ;;
+    *)
+        echo "Por favor, introduce un número válido entre 1 y 10."
+        ;;
+esac
+
+# ---------------------------
 
 # Ejercicio 2.2: Crear un script en Bash que simule un menú interactivo con las siguientes opciones:
 # 1. Calcular el área de un rectángulo.
@@ -242,6 +343,39 @@ fi
 
 # ---------------------------
 
+#!/bin/bash
+
+# Imprimimos el menú de opciones para el usuario
+echo "1. Calcular el área de un rectángulo"
+echo "2. Calcular el perímetro de un rectángulo" 
+echo "3. Salir" 
+
+# Leemos la opción seleccionada por el usuario, solicitándole con un mensaje qué opción elegir.
+read -p "Seleccione una opción(1, 2, 3): " opcion
+
+# Usamos una estructura condicional para evaluar la opción seleccionada por el usuario
+# Si ingresa la opción 1, se solicita la base y la altura del rectángulo y se calcula el área
+if [ $opcion -eq 1 ]; then
+    read -p "Ingrese la base del rectángulo: " base
+    read -p "Ingrese la altura del rectángulo: " altura
+    area=$((base * altura))
+    echo "El área del rectángulo es: $area"
+# Si ingresa la opción 2, se solicita la base y la altura del rectángulo y se calcula el perímetro
+elif [ $opcion -eq 2 ]; then
+    read -p "Ingrese la base del rectángulo: " base
+    read -p "Ingrese la altura del rectángulo: " altura
+    perimetro=$((2 * (base + altura)))
+    echo "El perímetro del rectángulo es: $perimetro"
+# Si ingresa la opción 3, se sale del programa
+elif [ $opcion -eq 3 ]; then
+    echo "Saliendo del programa."
+    exit 1
+# Si ingresa una opción no válida, se muestra un mensaje de error.
+else
+    echo "Opción no válida. Por favor, seleccione 1, 2 o 3."
+fi
+
+# ---------------------------
 
 # Ejercicio 2.3: Crear un script en Bash que permita al usuario introducir números de manera continua hasta que se ingrese el número 999. Después, se le preguntará si desea ver los números que ha introducido. Si la respuesta es afirmativa, se le permitirá seleccionar un orden para mostrar los números (orden establecido, ascendente o descendente).
 # Requisitos:
@@ -262,6 +396,59 @@ fi
 
 # ---------------------------
 
+#!/bin/bash
+
+# Creamos un array para almacenar los números que irá sumando el usuario
+numeros=()
+
+# Leemos el primer número que ingresa el usuario fuera del bucle
+read -p "Introduce un número (999 para terminar): " numero
+
+# Establecemos una estructura condicional para evaluar si `numero` no es 999.
+if [ "$numero" -ne 999 ]; then
+  numeros+=("$numero")
+fi
+
+# Establecemos un bucle while para ingresar números
+# -ne es el operador de comparación "no igual" en bash, dentro de la familia de -eq, como utilicé en ejercicios anteriores.
+while [ "$numero" -ne 999 ]; do
+  read -p "Introduce otro número (999 para terminar): " numero
+  if [ "$numero" -ne 999 ]; then
+    numeros+=("$numero")
+  fi
+done
+
+# Leemos en una variable si el usuario desea ver los números que introdujo anteriormente
+read -p "¿Quieres ver los números introducidos?(s/n) " ver
+
+# Establecemos una estructura condicional para el caso en que sí (s/S) y dentro de ella, otra estructura condicional case para el orden en que quiera ver los números
+
+if [[ "$ver" =~ ^[sS]$ ]]; then
+  read -p "¿ Orden de ingreso, ascendente o descendente?(o/a/d) " orden
+
+  case "$orden" in
+    # **ACLARACIÓN**: printf se usa para imprimir texto con formato y evitar errores, en este caso, con el formato %s que indica que se imprimirá una cadena de texto, y el \n indica un salto de línea.
+    # En cada case, se contempla la entrada de minúsculas y mayúsculas, por eso [oO], [aA],etc. 
+    [oO])
+      printf "%s\n" "${numeros[@]}"
+      ;;
+    [aA])
+      printf "%s\n" "${numeros[@]}" | sort -n
+      ;;
+    [dD])
+      printf "%s\n" "${numeros[@]}" | sort -nr
+      ;;
+    *)
+      echo "Opción no válida"
+      ;;
+  esac
+fi
+
+# Imprimimos el mensaje de despedida
+echo "Hasta la vista"
+
+# ---------------------------
+
 
 # Ejercicio 2.4: Crear un script que realice la misma pregunta tres veces: "¿Cuánto es 2 + 2?". Si el usuario responde correctamente, el script debe mostrar un mensaje de "Correcto" y finalizar. Si el usuario responde incorrectamente, el script debe indicarle cuántos intentos le quedan y permitirle intentar nuevamente. Después de tres intentos fallidos, el script debe mostrar un mensaje de "Game Over" y finalizar.
 # Requisitos:
@@ -270,6 +457,37 @@ fi
 # 3. Si el usuario responde incorrectamente, el script debe indicar cuántos intentos le quedan con el mensaje "Te quedan X intentos", donde X es el número de intentos restantes.
 # 4. El script debe permitir un máximo de tres intentos. Si el usuario no acierta en tres intentos, el script debe mostrar el mensaje "Game Over" y finalizar.
 
+
+# ---------------------------
+
+#!/bin/bash
+
+# Establecemos un bucle for para contener la mayoría de las acciones del programa 
+# porque ya sabemos que serán 3 veces máximo la cantidad de veces que se le deberá consultar al usuario la misma pregunta.
+
+# Dentro de la misma condición para for, establecemos como contador `i` en 1, condición de corte en 3 y incremento en 1.
+
+for ((i=1; i<=3; i++)); do
+  read -p "¿Cuánto es 2 + 2? " respuesta
+
+  if [ "$respuesta" -eq 4 ]; then
+    echo "CORRECTO, acertado en el intento $i"
+    # Agregamos sleep aquí para que el usuario tenga tiempo de leer el mensaje antes de que el programa termine con `exit`
+    sleep 2
+    exit 1
+  else
+    # En el caso de fallo, se le indica al usuario cuántos intentos le quedan, sumando la variable intentos_restantes y restando el total de intentos con la variable i.
+    if [ $i -lt 3 ]; then
+      intentos_restantes=$((3 - i))
+      echo "Te quedan $intentos_restantes intentos"
+    fi
+  fi
+
+done
+
+
+# Imprimimos "Game Over" ya que si llega aquí, el usuario falló los 3 intentos
+echo "Game Over"
 
 # ---------------------------
 
@@ -296,6 +514,62 @@ fi
 # • El script debe mostrar la pregunta al usuario y esperar su respuesta. Ejemplo: 2+2?
 # • Si la respuesta es correcta, el script incrementará el contador de aciertos.
 # • Al final, el script debe mostrar el número total de aciertos, por ejemplo: Tienes 3 aciertos
+
+
+# ---------------------------
+
+#!/bin/bash
+
+# Inicializar contador de aciertos
+aciertos=0
+
+# Verificar si el archivo existe
+if [ ! -f pregyresp.txt ]; then
+  echo "El archivo pregyresp.txt no se encuentra."
+  exit 1
+fi
+
+# Con la herramienta `tr` eliminamos posibles caractéres de retornos de carro, que en algunos casos no se pueden ejecutar bien en entornos Unix/Linux
+tr -d '\r' < pregyresp.txt > pregyresp_tmp.txt
+mv pregyresp_tmp.txt pregyresp.txt
+
+# Leemos el archivo y guardamos las preguntas y respuestas en arrays
+# `declare` es una palabra reservada de bash para declarar variables, con la flag `-a` indicamos que es un array.
+declare -a preguntas
+declare -a respuestas
+
+# Leemos el archivo línea por línea
+# IFS es una variable de shell que contiene los delimitadores de campo para separar entrada de texto (recordemos que en el .txt, la pregunta y la respuesta están separadas por `;` )
+while IFS=';' read -r pregunta respuesta_correcta || [ -n "$pregunta" ]; do
+  
+  # Eliminamos espacios alrededor de la pregunta, ya que sino en muchos casos nos dará error.
+  # sed es un argumento que conocía, pero su uso es complejo y tuve que consultar con otras fuentes al respecto.
+  pregunta=$(echo "$pregunta" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  respuesta_correcta=$(echo "$respuesta_correcta" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  
+  # Agregamos los resultados a los arrays para luego evaluar los aciertos
+  preguntas+=("$pregunta")
+  respuestas+=("$respuesta_correcta")
+done < pregyresp.txt
+
+# Procesamos cada pregunta/respuesta con un bucle `for`
+for ((i=0; i<${#preguntas[@]}; i++)); do
+  
+  # Mostramos la pregunta al usuario
+  echo -n "${preguntas[i]}? "
+  read respuesta_usuario
+  
+  # Comparamos la respuesta del usuario con la respuesta correcta (eliminamos con sed y tr espacios del usuario y covertimos a minúsculas)
+  # Luego acumulamos en `aciertos` si la respuesta es correcta
+  respuesta_usuario=$(echo "$respuesta_usuario" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | tr '[:upper:]' '[:lower:]')
+  respuesta_correcta=$(echo "${respuestas[i]}" | tr '[:upper:]' '[:lower:]')
+  if [ "$respuesta_usuario" = "$respuesta_correcta" ]; then
+    ((aciertos++))
+  fi
+done
+
+# Mostramos el número total de aciertos al finalizar el juego
+echo "Tienes $aciertos aciertos"
 
 
 # ---------------------------
