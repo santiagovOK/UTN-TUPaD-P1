@@ -2,7 +2,7 @@
 
 # Trabajo práctico Nº2 - Bash Scripting -  Varela Santiago Octavio (Comisión 22)
 
-# Resolución del trabajo práctico Nº6 al 2025-04-22
+# Resolución del trabajo práctico Nº6 al 2025-04-23
 
 # Respuestas también en https://github.com/santiagovOK/UTN-TUPaD-P1/tree/main/ayso_ejercicios/unidad-03_semana-06/ayso_VARELA_SEM-03_TP-02.ipynb
 
@@ -606,6 +606,58 @@ echo "Tienes $aciertos aciertos"
 
 # ---------------------------
 
+#!/bin/bash
+
+# Solicitamos al usuario que ingrese la ruta del archivo
+read -p "Ingresá la ruta de tu archivo: " ruta
+
+# Verificamos si el archivo existe con una estructura condicional general y usando el operador `-e`
+
+if [ -e "$ruta" ]; then
+    echo "El archivo existe."
+    
+    # Verificamos el tipo de archivo con una estructura condicional específica
+    if [ -f "$ruta" ]; then
+        echo "El archivo es un archivo ordinario."
+    elif [ -d "$ruta" ]; then
+        echo "El archivo es un directorio."
+    elif [ -b "$ruta" ]; then
+        echo "El archivo es un archivo especial de bloques."
+    elif [ -c "$ruta" ]; then
+        echo "El archivo es un archivo especial de caracteres."
+    elif [ -h "$ruta" ]; then
+        echo "El archivo es un archivo simbólico."
+    else
+        echo "El archivo es de otro tipo."
+    fi
+
+    # Utilizamos una estructura condicional para verificar los permisos del archivo
+    
+    # Verificamos si el archivo tiene permisos de lectura
+    if [ -r "$ruta" ]; then
+        echo "El archivo tiene permisos de lectura."
+    else
+        echo "El archivo no tiene permisos de lectura."
+    fi
+
+    # Verificamos si el archivo tiene permisos de escritura
+    if [ -w "$ruta" ]; then
+        echo "El archivo tiene permisos de escritura."
+    else
+        echo "El archivo no tiene permisos de escritura."
+    fi
+
+    # Verificamos si el archivo tiene permisos de ejecución
+    if [ -x "$ruta" ]; then
+        echo "El archivo tiene permisos de ejecución."
+    else
+        echo "El archivo no tiene permisos de ejecución."
+    fi
+    
+else
+    # Si el archivo no existe, mostramos un mensaje de error
+    echo "El archivo no existe."
+fi
 
 
 # ---------------------------
@@ -638,6 +690,36 @@ echo "Tienes $aciertos aciertos"
 # • El separador debe ser una línea de caracteres (por ejemplo, ==================================) para diferenciar claramente los contenidos de los archivos.
 
 # ---------------------------
+
+#!/bin/bash
+
+# Solicitamos al usuario que ingrese una extensión de archivo
+read -p "Escribí la extension del archivo que estás buscando: " extension
+
+# Usamos un bucle `for` para buscar todos los archivos en el directorio actual que tengan la extensión proporcionada
+
+for archivo in *.$extension; do
+    # Verificamos si el archivo existe con `-f` y una estructura condicional, ya que es más preciso para archivos ordinarios (no directorios u otros)
+    if [ -f "$archivo" ]; then
+        # Mostramos la extensión del archivo
+        echo "Extensión del archivo: $extension"
+        # Mostramos el nombre del archivo
+        echo "Nombre del archivo: $archivo"
+        
+        # Mostramos el contenido del archivo entre ===
+        echo
+        echo "Contenido del archivo entre ===:"
+        echo "=================================="
+        cat "$archivo"
+
+        # Imprimimos un separador de líneas luego de un espacio en blanco (tuve problemas con \n en estos casos)
+        echo
+        echo "=================================="
+    fi
+done
+
+# ---------------------------
+
 
 # Ejercicio 4.1: Crear un script que combine la información de dos archivos de texto (arch1.txt y arch2.txt) para generar un archivo de salida (union.txt) con el siguiente formato:
 # - En arch1.txt, cada línea contiene el nombre de un equipo de fútbol y el nombre de su estadio, separados por una coma.
@@ -674,6 +756,60 @@ echo "Tienes $aciertos aciertos"
 # 3. El script debe ser capaz de manejar archivos con múltiples líneas y combinar la información correctamente.
 
 # ---------------------------
+
+#!/bin/bash
+
+# **Aclaración:**Este es un caso similar a 2.5 en cuanto a la "lectura" de archivos
+
+# Eliminamos el archivo de salida si ya existe
+rm -f union.txt
+
+# Verificamos que los archivos de entrada existan
+if [ ! -f "arch1.txt" ] || [ ! -f "arch2.txt" ]; then
+    echo "Error: Uno o ambos archivos de entrada no existen."
+    exit 1
+fi
+
+# Procesamos cada línea del archivo arch1.txt, traido desde la linea `done < arch1.txt`
+while IFS=',' read -r equipo estadio; do
+
+    # Eliminamos los espacios en blanco al principio y final
+    equipo=$(echo "$equipo" | tr -d ' ')
+    estadio=$(echo "$estadio" | tr -d ' ')
+    
+    # Buscamos la línea en arch2.txt (traido con `done < arch2.txt`) que contiene el equipo
+    # `colores` termina almacenando los colores luego de la ejecución del while, por eso creamos la variable antes
+    colores=""
+    while IFS=';' read -r color equipo_arch2; do
+        # Eliminar espacios en blanco al principio y final
+        equipo_arch2=$(echo "$equipo_arch2" | tr -d ' ')
+        
+        if [ "$equipo" = "$equipo_arch2" ]; then
+            colores=$color
+            break # break evita lectura de líneas innecesarias del archivo arch2.txt
+        fi
+    done < arch2.txt
+    
+    # Si se encontraron los colores, se escribe la línea en el archivo de salida
+    if [ -n "$colores" ]; then
+        echo "$equipo;$colores;$estadio" >> union.txt
+    fi
+done < arch1.txt
+
+
+
+# Mensaje final en donde le indicamos al usuario que el proceso fue completado
+# Mostramos con `cat` el contenido del archivo `union.txt` así el usuario no lo tiene que abrir por fuera
+
+echo "Procesamiento completado. Contenido del archivo union.txt:"
+
+echo "-------------------------------------------------------"
+echo ""
+
+cat union.txt
+
+# ---------------------------
+
 
 # Ejercicio 4.2: Crear un script de gestión de una agenda de clubes, donde se puedan realizar diversas acciones sobre un archivo llamado agenda.txt. Este archivo contiene los siguientes datos de cada club: nombreclub, provincia, localidad, codigoclub.
 # El script debe ofrecer un menú interactivo con las siguientes opciones:
