@@ -2,7 +2,7 @@
 
 # Trabajo práctico Nº2 - Bash Scripting -  Varela Santiago Octavio (Comisión 22)
 
-# Resolución del trabajo práctico Nº6 al 2025-04-23
+# Resolución del trabajo práctico Nº6 al 2025-04-25
 
 # Respuestas también en https://github.com/santiagovOK/UTN-TUPaD-P1/tree/main/ayso_ejercicios/unidad-03_semana-06/ayso_VARELA_SEM-03_TP-02.ipynb
 
@@ -864,6 +864,157 @@ cat union.txt
 # Requisitos adicionales:
 # • Si un club ya existe, no se podrá insertar de nuevo y se debe informar al usuario.
 # • Si el club no existe, no podrá ser eliminado ni modificado, y se debe informar al usuario de la ausencia del club.
+
+# ---------------------------
+
+#!/bin/bash
+
+
+# Para que este script funcione, es necesario que agenda.txt esté creado previamente
+# Formato: nombreclub,provincia,localidad,codigoclub
+
+# Usamos un bucle while que contenga todo el programa. 
+# `while true;` hace que el programa se esté ejecutando constantemente en la terminal hasta que el usuario cambie la condición 
+while true; do
+
+    # Limpiamos la terminal al empezar el bucle
+    clear
+
+    # Imprimimos el primer menú de opciones
+    echo "===== Agenda de Clubes ====="
+    echo "1. Ver club"
+    echo "2. Gestionar"
+    echo "3. Salir"
+    echo "======================"
+
+    # Le solicitamos al usuario que elija una opción
+    read -p "Elige una opción: " opcion_principal
+    
+    # Creamos una estructura condicional `case` que tome todos los casos del menú
+    case $opcion_principal in
+        1)  
+            # En el caso de la opción 1 `Ver club`:
+            clear
+            echo "===== Ver Club ====="
+            read -p "Ingrese el club: " nombre_club
+            
+            # Verificamos si el club existe
+            if grep -i "^${nombre_club}," agenda.txt > /dev/null; then
+                grep -i "^${nombre_club}," agenda.txt
+            else
+                echo "El club $nombre_club no existe en la agenda."
+            fi
+            
+            read -p "Presione Enter para continuar..."
+            ;;
+            
+        2)  
+            # Caso de opción 2 `Menú de gestión`
+            # Estructura similar al `while` que contiene todo el programa
+            while true; do
+                clear
+                echo "===== Gestión de Clubes ====="
+                echo "1. Insertar club"
+                echo "2. Eliminar club"
+                echo "3. Modificar"
+                echo "4. Salir"
+                echo "======================"
+                read -p "Elige una opción: " opcion_gestion
+                
+                # Dentro de la opción 2 del `Menú de gestión`, insertamos casos anidados o subopciones para `Menú de gestión` con `case`
+                case $opcion_gestion in
+                    1)  
+                        #  Subopción 1 `Insertar club`
+                        clear
+                        echo "===== Insertar Club ====="
+                        read -p "Ingrese el club: " nombre_club
+                        
+                        # Verificamos si el club ya existe
+                        if grep -i "^${nombre_club}," agenda.txt > /dev/null; then
+                            echo "El club $nombre_club ya existe en la agenda."
+                        else
+                            read -p "Ingrese el nombre de su provincia: " provincia
+                            read -p "Ingrese su localidad: " localidad
+                            read -p "Ingrese su código: " codigo
+                            
+                            echo "$nombre_club,$provincia,$localidad,$codigo" >> agenda.txt
+                            echo "Club $nombre_club añadido correctamente."
+                        fi
+                        
+                        read -p "Presione Enter para continuar..."
+                        ;;
+                        
+                    2)  
+                        # Subopción 2 `Eliminar club`
+                        clear
+                        echo "===== Eliminar Club ====="
+                        read -p "Ingrese el club a eliminar: " nombre_club
+                        
+                        # Verificamos si el club existe
+                        if grep -i "^${nombre_club}," agenda.txt > /dev/null; then
+                            # Creamos un archivo temporal sin el club a eliminar
+                            grep -iv "^${nombre_club}," agenda.txt > agenda_temp.txt
+                            mv agenda_temp.txt agenda.txt
+                            echo "Club $nombre_club eliminado correctamente."
+                        else
+                            echo "El club $nombre_club no existe en la agenda."
+                        fi
+                        
+                        read -p "Presione Enter para continuar..."
+                        ;;
+                        
+                    3)  
+                        # Subopción 3 `Modificar club`
+                        clear
+                        echo "===== Modificar Club ====="
+                        read -p "Ingrese el club a modificar: " nombre_club
+                        
+                        # Verificamos si el club existe
+                        if grep -i "^${nombre_club}," agenda.txt > /dev/null; then
+                            # Eliminamos el club
+                            grep -iv "^${nombre_club}," agenda.txt > agenda_temp.txt
+                            
+                            # Pedimos los datos para el nuevo club
+                            read -p "Ingrese el nombre de su provincia: " provincia
+                            read -p "Ingrese su localidad: " localidad
+                            read -p "Ingrese su código: " codigo
+                            
+                            # Añadimos el club con los datos actualizados
+                            echo "$nombre_club,$provincia,$localidad,$codigo" >> agenda_temp.txt
+                            mv agenda_temp.txt agenda.txt
+                            echo "Club $nombre_club modificado correctamente."
+                        else
+                            echo "El club $nombre_club no existe en la agenda."
+                        fi
+                        
+                        read -p "Presione Enter para continuar..."
+                        ;;
+                        
+                    4)  
+                        # Subopción 4 `Salir al menú principal`
+                        break
+                        ;;
+                        
+                    *)  
+                        echo "Opción inválida"
+                        sleep 1
+                        ;;
+                esac
+            done
+            ;;
+            
+        3)  
+            # Opción 3 del menu principal - `Salir del programa`
+            echo "Saliendo del programa..."
+            exit 0
+            ;;
+            
+        *)  
+            echo "Opción inválida"
+            sleep 1
+            ;;
+    esac
+done
 
 # ---------------------------
 
