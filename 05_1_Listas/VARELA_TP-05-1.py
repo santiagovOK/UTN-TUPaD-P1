@@ -2,7 +2,7 @@
 
 Trabajo práctico Nº5.1 - Listas -  Varela Santiago Octavio (Comisión 22)
 
-Resolución del trabajo práctico Nº5 al 2025-04-27
+Resolución del trabajo práctico Nº5 al 2025-04-28
 
 Respuestas también en https://github.com/santiagovOK/UTN-TUPaD-P1/tree/main/05_1_Listas/VARELA_TP-05-1.ipynb
 
@@ -100,17 +100,56 @@ Al finalizar, se imprime con `print` la variable `numeros`,  que ya fue actualiz
 
 # ---
 
+# Creamos la variable `lista_en_cinco` que almacena la lista con el rango propuesto (similar a la consigna 1.)
+lista_en_cinco = list(range(10, 31, 5))
+
+# Imprimimos la lista completa
+print("Lista completa:")
+print(lista_en_cinco)
+
+# Imprimimos los números que nos propone la consigna (los dos primeros)
+print("Primeros dos números de la lista:")
+print(lista_en_cinco[0], lista_en_cinco[1])
+
+# Imprimimos el tipo de dato para hacer notar que es una lista y no otro
+print("Tipo de dato de lo impreso en la línea anterior:")
+print(type(lista_en_cinco))
+
 # ---
 
 # 7) Reemplazar los dos valores centrales (índices 1 y 2) de la lista “autos” por dos nuevos valores cualesquiera.
 
 # ---
 
+# Creamos la variable `autos` para almacenar los elementos de la lista original
+autos = ["sedan", "polo", "suran", "gol"]
+
+# Imprimimos la lista original `autos` para referencia
+print("Lista original: ", autos)
+
+# Reemplazamos los valores de las posiciones `[0]` y `[1]`
+autos[1] = "gris"
+autos[2] = "oscuro"
+
+# Imprimimos la lista modificada
+print("Lista modificada: ", autos)
+
 # ---
 
 # 8) Crear una lista vacía llamada "dobles" y agregar el doble de 5, 10 y 15 usando append directamente. Imprimir la lista resultante por pantalla.
 
 # ---
+
+# Creamos la variable `dobles` como lista vacía
+dobles = []
+
+# Usamos `append` multiplicando(*) por 2 en cada caso para añadir el doble de cada número por cada elemento 
+dobles.append(5*2)
+dobles.append(10*2)
+dobles.append(15*2)
+
+# Imprimimos la lista resultante
+print(dobles)
 
 # ---
 
@@ -123,6 +162,30 @@ Al finalizar, se imprime con `print` la variable `numeros`,  que ya fue actualiz
 
 # ---
 
+# Creamos la variable `compras` que incluirá la lista general y sus listas anidadas
+compras = [["pan", "leche"], ["arroz", "fideos", "salsa"],["agua"]]
+
+# Añadimos "jugo" a la tercera lista anidada (posición [2]) - punto a)
+compras[2].append("jugo")
+
+# Imprimimos la lista anidada [2] para mostrar el cambio
+print(compras[2])
+
+# Cambiamos el elemento "fideos" `[1][1]` de la lista anidada `[1]` por "tallarines" - punto b)
+compras[1][1] = "tallarines"
+
+# Imprimimos la lista anidada con el cambio anterior
+print(compras[1])
+
+# Eliminamos "pan" de la lista anidada `[0]` del primer cliente
+compras[0].remove("pan")
+
+# Imprimimos la lista anidada `[0]`
+print(compras[0])
+
+# Imprimimos la lista final con todos los cambios en las listas anidadas
+print("Lista final con todos los cambios en las compras de los clientes: ", compras)
+
 # ---
 
 # 10) Elaborar una lista anidada llamada “lista_anidada” que contenga los siguientes elementos:
@@ -133,3 +196,26 @@ Al finalizar, se imprime con `print` la variable `numeros`,  que ya fue actualiz
 # ● Posición lista_anidada[2][2]: 30.6
 # ● Posición lista_anidada[3]: False
 # Imprimir la lista resultante por pantalla.
+
+# ---
+
+# Creamos la variable `lista_anidada`
+lista_anidada = [15, True, [25.5, 57.9, 30.6], False]
+
+# Imprimimos la `lista_anidada[0]` con el elemento `15`. Dado que es un solo elemento no es necesario anidar
+print(lista_anidada[0])
+
+# Imprimimos la `lista_anidada[1]` con el elemento `True`. Dado que es un solo elemento no es necesario anidar
+print(lista_anidada[1])
+
+# Imprimimos los diferentes elementos `[2][0]` , `[2][1]` , `[2][2]` de la `lista_anidada[2]`
+print(lista_anidada[2][0])
+print(lista_anidada[2][1])
+print(lista_anidada[2][2])
+
+# Imprimimos la `lista_anidada[2]` para mejor referencia de lo anterior
+print(lista_anidada[2])
+
+# Imprimimos la `lista_anidada[3]` con el elemento `False`. Dado que es un solo elemento no es necesario anidar
+print(lista_anidada[3])
+# ---
