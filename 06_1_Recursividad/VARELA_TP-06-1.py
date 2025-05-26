@@ -15,6 +15,31 @@ entre 1 y el número que indique el usuario.
 
 # ----------------------------------------------------------------------
 
+# Utilizamos la función recursiva para calcular el factorial de un número. Similar a uno de los ejemplos vistos en las actividades de esta unidad
+
+def factorial_recur(x):
+    if x == 0:
+        return 1
+    else:
+        return x * factorial_recur(x - 1)
+
+# Creamos una variable que almacenará el número ingresado por el usuario
+num_usuario = int(input("Ingrese un número: "))
+
+# Creamos una estructura condicional para verificar si el número ingresado es negativo, cero o positivo
+if num_usuario < 0:
+    print("El factorial no está definido para números negativos.")
+elif num_usuario == 0:
+    print("El factorial de 0 es 1.")   
+# Si el número es positivo, calculamos el factorial de todos los números enteros entre 1 y el número ingresado
+else:
+    print(f"Ingresaste {num_usuario}")
+    print(f"Calculemos los factoriales de los números enteros entre 1 y {num_usuario}...")
+    # Utilizamos un bucle for para iterar sobre los números enteros entre 1 y el número ingresado
+    for i in range(1, num_usuario + 1):
+        print(f"El factorial de {i} es {factorial_recur(i)}")
+
+
 # ----------------------------------------------------------------------
 
 """
@@ -24,6 +49,30 @@ entre 1 y el número que indique el usuario.
 
 # ----------------------------------------------------------------------
 
+# Definimos la función recursiva para calcular el valor de la serie de Fibonacci en una posición específica, similar a uno de los ejemplos vistos en las actividades
+
+def fibonacci_recursivo(posicion):
+    if posicion == 0:
+        return 0
+    elif posicion == 1:
+        return 1
+    else:
+        return fibonacci_recursivo(posicion - 1) + fibonacci_recursivo(posicion - 2)
+
+# Le solicitamos al usuario que ingrese la posición de la serie de Fibonacci que desea calcular
+pos_usuario = int(input("Ingrese la posición de la serie de Fibonacci que desea calcular: "))
+
+# Creamos una condición para verificar que la posición ingresada sea un número entero no negativo, en donde también irá el bucle for para mostrar la serie completa hasta la posición elegida por el usuario
+if pos_usuario < 0:
+    print("La posición debe ser un número entero no negativo.")
+# Caso positivo
+else:
+    print(f"La posición elegida por el usuario es: {pos_usuario}")
+    print("Serie de Fibonacci completa hasta la posición elegida", pos_usuario, ":")
+    # Bucle for para mostrar la serie completa hasta la posición elegida por el usuario, utilizando la función recursiva definida anteriormente.
+    for i in range(pos_usuario + 1):
+        print(fibonacci_recursivo(i))
+
 # ----------------------------------------------------------------------
 
 """
@@ -32,6 +81,26 @@ entre 1 y el número que indique el usuario.
 
 # ----------------------------------------------------------------------
 
+# Creamos la función recursiva para calcular la potencia de un número base elevado a un exponente
+def potencia_recursiva(base, exponente):
+    if exponente == 0: # Caso base
+        return 1
+    elif exponente < 0: # Caso para exponentes negativos
+        return 1 / potencia_recursiva(base, -exponente)
+    else:
+        return base * potencia_recursiva(base, exponente - 1) # Llamada recursiva
+    
+# Programa principal - Probamos la función recursiva `potencia_recursiva`
+
+# Le solicitamos al usuario que ingresa una base y su exponente
+base = int(input("Ingrese la base: "))
+exponente = int(input("Ingrese el exponente: "))
+
+# Mostramos el resultado de la potencia, ingresando como argumentos la base y el exponente a la `potencia_recursiva`
+
+print(f"{base} elevado a la {exponente} es igual a {potencia_recursiva(base, exponente)}")
+
+
 # ----------------------------------------------------------------------
 
 """
@@ -39,6 +108,25 @@ entre 1 y el número que indique el usuario.
 """
 
 # ----------------------------------------------------------------------
+
+def decimal_a_binario(numero):
+
+    # Almacenamos el residuo de la división del número por 2 en `residuo`
+    residuo = numero % 2
+
+    # Establecemos el caso base: si el número es 0 o 1, devolvemos su representación en binario como cadena de texto
+    if numero == 0:
+        return "0"
+    elif numero == 1:
+        return "1"
+    # En el último caso, llamamos a la función recursivamente con el cociente de la división del número por 2, y concatenamos el residuo como cadena de texto
+    else:
+        # Almacenamos el resultado de la llamada recursiva en `resultado` para poder imprimir el paso a paso de la recursividad.
+        resultado = decimal_a_binario(numero // 2) + str(residuo)
+        print(f"decimal_a_binario({numero}) = {resultado}")        
+        return resultado
+
+print((decimal_a_binario(10)))  # Salida esperada: 1010 ; si se usa `type` es posible ver que el resultado final es una cadena (str)
 
 # ----------------------------------------------------------------------
 
@@ -50,9 +138,30 @@ La solución debe ser recursiva.
 No se debe usar [::-1] ni la función reversed().
 """
 
-# ----------------------------------------------------------------------
+#----------------------------------------------------------------------
 
-# ----------------------------------------------------------------------
+def es_palindromo(palabra):
+    # Caso base: una palabra de longitud 0 o 1 es un palíndromo por definición
+    if len(palabra) <= 1:
+        print("\nCaso base: la palabra es un palíndromo - Entonces...")
+        return True
+    # Comparamos los extremos. Si son diferentes, no es un palíndromo por definición
+    elif palabra[0] != palabra[-1]:
+        print("\nLos extremos son diferentes - Entonces...")
+        return False
+    # Establecemos el caso recursivo: si los extremos son iguales, llamamos a la función con la palabra sin los extremos hasta el caso base (longitud 0 o 1)
+    else:
+        print(f"{palabra}") # Imprimimos el paso a paso de la recursividad
+        resultado = es_palindromo(palabra[1:-1])
+        return resultado # Devolvemos el resultado final de la llamada recursiva
+
+print(es_palindromo("radar"))  # Salida esperada: True
+print("\n")
+print(es_palindromo("reconocer")) # Salida esperada: True
+print("\n")
+print(es_palindromo("hola"))  # Salida esperada: False
+
+#----------------------------------------------------------------------
 
 """
 6) Escribí una función recursiva en Python llamada suma_digitos(n) que reciba un
