@@ -1,6 +1,6 @@
 # Trabajo práctico Nº7 - Recursividad -  Varela Santiago Octavio (Comisión 22)
 
-# Resolución del trabajo práctico Nº7 al 2025-05-22
+# Resolución del trabajo práctico Nº7 al 2025-05-26
 
 # Respuestas también en https://github.com/santiagovOK/UTN-TUPaD-P1/tree/main/06_1_Recursividad/VARELA_TP-06-1.ipynb
 
@@ -76,7 +76,7 @@ else:
 # ----------------------------------------------------------------------
 
 """
-3) Crea una función recursiva que calcule la potencia de un número base elevado a un exponente, utilizando la fórmula nm = n ∗ n(m−1). Prueba esta función en un algoritmo general.
+3) Crea una función recursiva que calcule la potencia de un número base elevado a un exponente, utilizando la fórmula n^m = n ∗ n^(m−1). Prueba esta función en un algoritmo general.
 """
 
 # ----------------------------------------------------------------------
@@ -180,6 +180,23 @@ suma_digitos(305) → 8 (3 + 0 + 5)
 
 # ----------------------------------------------------------------------
 
+def suma_digitos(n):
+    if n == 0: # Establecemos el caso base: si n es 0, la suma de los dígitos es 0.
+        return 0
+    else:
+        print(f"Actual iteración `n`:{n}") # Imprimimos el valor actual de n para ver cómo cambia en cada iteración.
+        return n % 10 + suma_digitos(n // 10) # Sumamos el último dígito de n (n % 10) y llamamos recursivamente a la función con el resto de los dígitos (n // 10).
+
+# Imprimimos los resultados de las pruebas para verificar que la función funciona correctamente.
+print(suma_digitos(1234)) # Output: 10
+print("\n")
+print(suma_digitos(321)) # Output: 6
+print("\n")
+print(suma_digitos(305)) # Output: 8
+
+# ----------------------------------------------------------------------
+
+
 """
 7) Un niño está construyendo una pirámide con bloques. En el nivel más bajo coloca n
 bloques, en el siguiente nivel uno menos (n - 1), y así sucesivamente hasta llegar al
@@ -200,6 +217,24 @@ contar_bloques(4) → 10
 """
 # ----------------------------------------------------------------------
 
+def contar_bloques(n):
+    if n == 1: # Establecemos el caso base: si n es 1, el número de bloques es 1.
+        print(f"Actual iteración `n`:{n}") # Imprimimos el valor actual de n para ver cómo cambia en cada iteración (en este caso, solo se imprime una vez, cuando se llega al caso base).
+        return 1
+    else:
+        print(f"Actual iteración `n`:{n}") # Imprimimos el valor actual de n para ver cómo cambia en cada iteración.
+        return n + contar_bloques(n - 1) # Sumamos el número de bloques en el nivel actual (n) y llamamos recursivamente a la función con el nivel anterior (n - 1).
+# Imprimimos los resultados de las pruebas para verificar que la función funciona correctamente.
+
+print(contar_bloques(1)) # Output: 1
+print("\n")
+print(contar_bloques(2)) # Output: 3
+print("\n")
+print(contar_bloques(4)) # Output: 10
+
+# ----------------------------------------------------------------------
+
+
 """
 8) Escribí una función recursiva llamada contar_digito(numero, digito) que reciba un
 número entero positivo (numero) y un dígito (entre 0 y 9), y devuelva cuántas veces
@@ -214,3 +249,27 @@ contar_digito(123456, 7) →0
 
 # ----------------------------------------------------------------------
 
+def contar_digito(numero, digito):
+    if numero == 0: # Establecemos el caso base: si numero es 0, el dígito no aparece en el número.
+        return 0
+    else:
+        print(f"Actual iteración `numero`:{numero}") # Imprimimos el valor actual de numero para ver cómo cambia en cada iteración.
+        
+        # Si el último dígito de numero es igual al dígito buscado, sumamos 1 y llamamos recursivamente a la función con el resto de los dígitos.
+        
+        if numero % 10 == digito: 
+            return 1 + contar_digito(numero // 10, digito)
+        else:
+            
+        # Si el último dígito de numero no es igual al dígito buscado, llamamos recursivamente a la función con el resto de los dígitos para seguir contando.
+            return contar_digito(numero // 10, digito)
+
+# Imprimimos los resultados de las pruebas para verificar que la función funciona correctamente.
+
+print(contar_digito(12233421, 2)) # Output: 3
+print("\n")
+print(contar_digito(5555, 5)) # Output: 4
+print("\n")
+print(contar_digito(123456, 7)) # Output: 0
+
+# ----------------------------------------------------------------------
